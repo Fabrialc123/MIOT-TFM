@@ -1,0 +1,16 @@
+# sudo cp reTerminalStartup.service /lib/systemd/system/reTerminalStartup.service
+# sudo systemctl enable reTerminalStartup.service
+# sudo systemctl start reTerminalStartup.service
+[Unit]
+Description=Start Chromium in kiosk mode on reTerminal
+After=graphical.target
+Requires=graphical.target
+
+[Service]
+User=MIOT
+Environment=DISPLAY=:0
+ExecStart=/opt/reTerminalStartup/start.sh
+Restart=on-failure
+
+[Install]
+WantedBy=graphical.target

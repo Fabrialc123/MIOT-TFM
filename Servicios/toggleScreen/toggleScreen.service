@@ -1,0 +1,15 @@
+# sudo cp toggleScreen.service /lib/systemd/system/toggleScreen.service
+# sudo systemctl enable toggleScreen.service
+# sudo systemctl start toggleScreen.service
+[Unit]
+Description=Toggle screen on KEY_SLEEP press
+After=graphical.target
+
+[Service]
+ExecStart=/opt/toggleScreen/start.sh
+Restart=always
+User=MIOT
+Environment=DISPLAY=:0
+
+[Install]
+WantedBy=graphical.target

@@ -1,0 +1,793 @@
+[
+    {
+        "id": "fd4e7f44141e5491",
+        "type": "tab",
+        "label": "TTN to InfluxDB",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "93d852af313b312a",
+        "type": "mqtt in",
+        "z": "fd4e7f44141e5491",
+        "name": "Davis (Uplink messages)",
+        "topic": "v3/davis/devices/+/up",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "c5892c690c710f99",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 230,
+        "y": 360,
+        "wires": [
+            [
+                "100485267bc9b1ef",
+                "0c3df2032ee2a08f",
+                "acb7fef1d749eded"
+            ]
+        ]
+    },
+    {
+        "id": "100485267bc9b1ef",
+        "type": "debug",
+        "z": "fd4e7f44141e5491",
+        "name": "MSG",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 490,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "0c3df2032ee2a08f",
+        "type": "debug",
+        "z": "fd4e7f44141e5491",
+        "name": "FRM_PAYLOAD",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.uplink_message.frm_payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 520,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "8fed7fcd99e1ce77",
+        "type": "base64",
+        "z": "fd4e7f44141e5491",
+        "name": "Base64 decoder",
+        "action": "",
+        "property": "payload",
+        "x": 800,
+        "y": 360,
+        "wires": [
+            [
+                "a332c93a625c038f",
+                "70e7b3e4c5d8a689"
+            ]
+        ]
+    },
+    {
+        "id": "a332c93a625c038f",
+        "type": "debug",
+        "z": "fd4e7f44141e5491",
+        "name": "BIN PAYLOAD",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 960,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "acb7fef1d749eded",
+        "type": "change",
+        "z": "fd4e7f44141e5491",
+        "name": "Keep frm_payload",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.uplink_message.frm_payload",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 530,
+        "y": 360,
+        "wires": [
+            [
+                "8fed7fcd99e1ce77",
+                "b970297962ea3435"
+            ]
+        ]
+    },
+    {
+        "id": "b970297962ea3435",
+        "type": "debug",
+        "z": "fd4e7f44141e5491",
+        "name": "PAYLOAD",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "17e0d91e9274d18d",
+        "type": "buffer-parser",
+        "z": "fd4e7f44141e5491",
+        "name": "Payload decoder",
+        "data": "payload",
+        "dataType": "msg",
+        "specification": "spec",
+        "specificationType": "ui",
+        "items": [
+            {
+                "type": "bool",
+                "name": "Battery",
+                "offset": 0,
+                "length": 1,
+                "offsetbit": 7,
+                "scale": "1",
+                "mask": "10000000"
+            },
+            {
+                "type": "uint8",
+                "name": "ID",
+                "offset": 0,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": "01111111"
+            },
+            {
+                "type": "uint8",
+                "name": "PacketCount",
+                "offset": 1,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "WindSpeed_INT",
+                "offset": 2,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "WindSpeed_DEC",
+                "offset": 3,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "WindDir_INT",
+                "offset": 4,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "WindDir_DEC",
+                "offset": 5,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "Humidity_INT",
+                "offset": 6,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "Humidity_DEC",
+                "offset": 7,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "Rain_INT",
+                "offset": 8,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "Rain_DEC",
+                "offset": 9,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "SolarRadiation_INT",
+                "offset": 10,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "SolarRadiation_DEC",
+                "offset": 11,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "Temperature_INT",
+                "offset": 12,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "Temperature_DEC",
+                "offset": 13,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "UV_INT",
+                "offset": 14,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "UV_DEC",
+                "offset": 15,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "buffer",
+                "name": "Payload",
+                "offset": 0,
+                "length": 16,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            }
+        ],
+        "swap1": "",
+        "swap2": "",
+        "swap3": "",
+        "swap1Type": "swap",
+        "swap2Type": "swap",
+        "swap3Type": "swap",
+        "msgProperty": "payload",
+        "msgPropertyType": "str",
+        "resultType": "keyvalue",
+        "resultTypeType": "return",
+        "multipleResult": false,
+        "fanOutMultipleResult": false,
+        "setTopic": true,
+        "outputs": 1,
+        "x": 790,
+        "y": 540,
+        "wires": [
+            [
+                "1eecd0c859f66ce3",
+                "caea8e85e958f2f5"
+            ]
+        ]
+    },
+    {
+        "id": "1eecd0c859f66ce3",
+        "type": "debug",
+        "z": "fd4e7f44141e5491",
+        "name": "Payload decoded",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "70e7b3e4c5d8a689",
+        "type": "switch",
+        "z": "fd4e7f44141e5491",
+        "name": "Has PacketCount?",
+        "property": "payload[3]",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nnull"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 530,
+        "y": 580,
+        "wires": [
+            [
+                "17e0d91e9274d18d"
+            ],
+            [
+                "a3f2d33d1751dd1e"
+            ]
+        ]
+    },
+    {
+        "id": "a517bb72f035f30c",
+        "type": "debug",
+        "z": "fd4e7f44141e5491",
+        "name": "PacketCount MISSING",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1020,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "a3f2d33d1751dd1e",
+        "type": "buffer-parser",
+        "z": "fd4e7f44141e5491",
+        "name": "Payload decoder",
+        "data": "payload",
+        "dataType": "msg",
+        "specification": "spec",
+        "specificationType": "ui",
+        "items": [
+            {
+                "type": "bool",
+                "name": "Battery",
+                "offset": 0,
+                "length": 1,
+                "offsetbit": 7,
+                "scale": "1",
+                "mask": "10000000"
+            },
+            {
+                "type": "uint8",
+                "name": "ID",
+                "offset": 0,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": "01111111"
+            },
+            {
+                "type": "buffer",
+                "name": "Payload",
+                "offset": 0,
+                "length": 3,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": "01111111"
+            }
+        ],
+        "swap1": "",
+        "swap2": "",
+        "swap3": "",
+        "swap1Type": "swap",
+        "swap2Type": "swap",
+        "swap3Type": "swap",
+        "msgProperty": "payload",
+        "msgPropertyType": "str",
+        "resultType": "keyvalue",
+        "resultTypeType": "return",
+        "multipleResult": false,
+        "fanOutMultipleResult": false,
+        "setTopic": true,
+        "outputs": 1,
+        "x": 790,
+        "y": 620,
+        "wires": [
+            [
+                "9d0620b8cbe96818"
+            ]
+        ]
+    },
+    {
+        "id": "9d0620b8cbe96818",
+        "type": "change",
+        "z": "fd4e7f44141e5491",
+        "name": "Set PacketCount to 0",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.PacketCount",
+                "pt": "msg",
+                "to": "0",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1020,
+        "y": 620,
+        "wires": [
+            [
+                "a517bb72f035f30c",
+                "9615dbb2dd3cc050"
+            ]
+        ]
+    },
+    {
+        "id": "6e6b020843199ba2",
+        "type": "influxdb out",
+        "z": "fd4e7f44141e5491",
+        "influxdb": "4906a1265a0fc5d1",
+        "name": "Save in DB",
+        "measurement": "TEST",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 1310,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "caea8e85e958f2f5",
+        "type": "change",
+        "z": "fd4e7f44141e5491",
+        "name": "FINAL Payload",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.WindSpeed",
+                "pt": "msg",
+                "to": "msg.payload.WindSpeed_INT + (msg.payload.WindSpeed_DEC / 100)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "delete",
+                "p": "payload.WindSpeed_INT",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "payload.WindSpeed_DEC",
+                "pt": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload.WindDir",
+                "pt": "msg",
+                "to": "msg.payload.WindDir_INT + (msg.payload.WindDir_DEC / 100)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "delete",
+                "p": "payload.WindDir_INT",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "payload.WindDir_DEC",
+                "pt": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload.Humidity",
+                "pt": "msg",
+                "to": "msg.payload.Humidity_INT + (msg.payload.Humidity_DEC / 100)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "delete",
+                "p": "payload.Humidity_INT",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "payload.Humidity_DEC",
+                "pt": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload.Rain",
+                "pt": "msg",
+                "to": "msg.payload.Rain_INT + (msg.payload.Rain_DEC / 100)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "delete",
+                "p": "payload.Rain_INT",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "payload.Rain_DEC",
+                "pt": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload.SolarRadiation",
+                "pt": "msg",
+                "to": "msg.payload.SolarRadiation_INT + (msg.payload.SolarRadiation_DEC / 100)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "delete",
+                "p": "payload.SolarRadiation_INT",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "payload.SolarRadiation_DEC",
+                "pt": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload.Temperature",
+                "pt": "msg",
+                "to": "msg.payload.Temperature_INT + (msg.payload.Temperature_DEC / 100) - 120",
+                "tot": "jsonata"
+            },
+            {
+                "t": "delete",
+                "p": "payload.Temperature_INT",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "payload.Temperature_DEC",
+                "pt": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload.UV",
+                "pt": "msg",
+                "to": "msg.payload.UV_INT + (msg.payload.UV_DEC / 100)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "delete",
+                "p": "payload.UV_INT",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "payload.UV_DEC",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1000,
+        "y": 540,
+        "wires": [
+            [
+                "3d5dec9bee3e7a8b",
+                "9615dbb2dd3cc050"
+            ]
+        ]
+    },
+    {
+        "id": "3d5dec9bee3e7a8b",
+        "type": "debug",
+        "z": "fd4e7f44141e5491",
+        "name": "FINAL Payload Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1020,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "9615dbb2dd3cc050",
+        "type": "change",
+        "z": "fd4e7f44141e5491",
+        "name": "Set ID to String",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.ID",
+                "pt": "msg",
+                "to": "$string(msg.payload.ID,false)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 600,
+        "y": 820,
+        "wires": [
+            [
+                "dd4e332aa6b34426"
+            ]
+        ]
+    },
+    {
+        "id": "fed5c1a9114b5775",
+        "type": "debug",
+        "z": "fd4e7f44141e5491",
+        "name": "Message saved in DB",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1340,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "dd4e332aa6b34426",
+        "type": "base64",
+        "z": "fd4e7f44141e5491",
+        "name": "",
+        "action": "",
+        "property": "payload.Payload",
+        "x": 780,
+        "y": 820,
+        "wires": [
+            [
+                "2aece404f967b185"
+            ]
+        ]
+    },
+    {
+        "id": "2aece404f967b185",
+        "type": "function",
+        "z": "fd4e7f44141e5491",
+        "name": "Set Coords",
+        "func": "switch(msg.payload.ID){\ncase (\"0\"):\n    msg.payload.Latitude = -62.657324;\n    msg.payload.Longitude = -61.071721;\n    break;\n\ncase (\"1\"):\n    msg.payload.Latitude = -62.656445;\n    msg.payload.Longitude = -61.070981;\n    break;\n\ncase(\"2\"):\n    msg.payload.Latitude = -62.657145;\n    msg.payload.Longitude = -61.067097;\n    break;\n\ncase(\"3\"):\n    break;\n\ncase(\"4\"):\n    break;\n\ncase(\"5\"):\n    break;\n\ncase(\"6\"):\n    break;\n\ncase(\"7\"):\n    break;\n\n\ndefault:\n    break;\n\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1010,
+        "y": 820,
+        "wires": [
+            [
+                "fed5c1a9114b5775",
+                "6e6b020843199ba2"
+            ]
+        ]
+    },
+    {
+        "id": "c5892c690c710f99",
+        "type": "mqtt-broker",
+        "name": "davis",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "4906a1265a0fc5d1",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "data",
+        "name": "InfluxDB",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "timeout": "10",
+        "rejectUnauthorized": true
+    }
+]
