@@ -1,0 +1,99 @@
+menu "LoRaWAN Configuration"
+
+	config LoRaWAN_GPIO_RANGE_MAX
+		int
+		default 39 if IDF_TARGET_ESP32
+		default 46 if IDF_TARGET_ESP32S2
+		default 48 if IDF_TARGET_ESP32S3
+		default 18 if IDF_TARGET_ESP32C2
+		default 19 if IDF_TARGET_ESP32C3
+		default 30 if IDF_TARGET_ESP32C6
+
+	config LoRaWAN_MISO_GPIO
+		int "RFM95 MISO GPIO"
+		range 0 LoRaWAN_GPIO_RANGE_MAX
+		default 19 if IDF_TARGET_ESP32
+		default 37 if IDF_TARGET_ESP32S2 || IDF_TARGET_ESP32S3
+		default  4 # C3 and others
+		help
+			Pin Number to be used as the MISO SPI signal.
+
+	config LoRaWAN_SCK_GPIO
+		int "RFM95 SCK GPIO"
+		range 0 LoRaWAN_GPIO_RANGE_MAX
+		default 18 if IDF_TARGET_ESP32
+		default 36 if IDF_TARGET_ESP32S2 || IDF_TARGET_ESP32S3
+		default  3 # C3 and others
+		help
+			Pin Number to be used as the SCK SPI signal.
+
+	config LoRaWAN_MOSI_GPIO
+		int "RFM95 MOSI GPIO"
+		range 0 LoRaWAN_GPIO_RANGE_MAX
+		default 23 if IDF_TARGET_ESP32
+		default 35 if IDF_TARGET_ESP32S2 || IDF_TARGET_ESP32S3
+		default  2 # C3 and others
+		help
+			Pin Number to be used as the MOSI SPI signal.
+
+	config LoRaWAN_NSS_GPIO
+		int "RFM95 NSS GPIO"
+		range 0 LoRaWAN_GPIO_RANGE_MAX
+		default  5 if IDF_TARGET_ESP32
+		default 34 if IDF_TARGET_ESP32S2 || IDF_TARGET_ESP32S3
+		default  1 # C3 and others
+		help
+			Pin Number to be used as the CSN SPI signal.
+
+	config LoRaWAN_RST_GPIO
+		int "RFM95 RESTE GPIO"
+		range 0 LoRaWAN_GPIO_RANGE_MAX
+		default 16 if IDF_TARGET_ESP32
+		default 38 if IDF_TARGET_ESP32S2 || IDF_TARGET_ESP32S3
+		default  0 # C3 and others
+		help
+			Pin Number to be used as the RESET signal.
+
+	choice LoRaWAN_SPI_HOST
+		prompt "SPI peripheral that controls this bus"
+		default VSPI_HOST
+		help
+			Select SPI peripheral that controls this bus.
+		config HSPI_HOST
+			bool "HSPI_HOST"
+			help
+				Use SPI2_HOST. This is also called HSPI_HOST.
+		config VSPI_HOST
+			depends on IDF_TARGET_ESP32 || IDF_TARGET_ESP32S2 || IDF_TARGET_ESP32S3
+			bool "VSPI_HOST"
+			help
+				USE SPI3_HOST. This is also called VSPI_HOST
+	endchoice
+	
+	config LoRaWAN_DIO0
+		int "DIO0 GPIO"
+		range 0 LoRaWAN_GPIO_RANGE_MAX
+		default 26
+		
+	config LoRaWAN_DIO1
+		int "DIO1 GPIO"
+		range 0 LoRaWAN_GPIO_RANGE_MAX
+		default 35	
+	
+	config LoRaWAN_AppEUI
+		string "AppEUI/JoinEUI"
+		
+	config LoRaWAN_DevEUI
+		string "DevEUI"
+		
+	config LoRaWAN_AppKey
+		string "AppKey"
+	
+	config LoRaWAN_SEND_INTERVAL
+		int "Send Interval (s)"
+		range 60 86400
+		default 60
+		help
+			Interval frecuency to send data.
+
+endmenu
